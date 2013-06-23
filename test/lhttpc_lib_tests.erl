@@ -123,6 +123,17 @@ parse_url_test_() ->
                         },
                       lhttpc_lib:parse_url("http://joe:erlang@host:180/foo/bar")),
 
+
+        ?_assertEqual(#lhttpc_url{
+                         host = "host",
+                         port = 180,
+                         path = "/foo/bar",
+                         is_ssl = false,
+                         user = "joe",
+                         password = "erl@ng"
+                        },
+                      lhttpc_lib:parse_url("http://joe:erl%40ng@host:180/foo/bar")),
+
         ?_assertEqual(#lhttpc_url{
                          host = "host",
                          port = 180,
@@ -148,7 +159,7 @@ parse_url_test_() ->
                          port = 180,
                          path = "/foo/bar",
                          is_ssl = false,
-                         user = "joe%3Aarm",
+                         user = "joe:arm",
                          password = "erlang"
                         },
                       lhttpc_lib:parse_url("http://joe%3Aarm:erlang@host:180/foo/bar")),
@@ -158,8 +169,8 @@ parse_url_test_() ->
                          port = 180,
                          path = "/foo/bar",
                          is_ssl = false,
-                         user = "joe%3aarm",
-                         password = "erlang%2Fotp"
+                         user = "joe:arm",
+                         password = "erlang/otp"
                         },
                       lhttpc_lib:parse_url("http://joe%3aarm:erlang%2Fotp@host:180/foo/bar")),
 
@@ -201,5 +212,15 @@ parse_url_test_() ->
                          user = "joe",
                          password = "erlang"
                         },
-                      lhttpc_lib:parse_url("http://joe:erlang@[1080:0:0:0:8:800:200C:417A]:180/foo/bar"))
+                      lhttpc_lib:parse_url("http://joe:erlang@[1080:0:0:0:8:800:200C:417A]:180/foo/bar")),
+
+        ?_assertEqual(#lhttpc_url{
+                         host = "www.example.com",
+                         port = 80,
+                         path = "/?a=b",
+                         is_ssl = false,
+                         user = "",
+                         password = ""
+                        },
+                      lhttpc_lib:parse_url("http://www.example.com?a=b"))
     ].
